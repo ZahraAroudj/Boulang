@@ -11,6 +11,9 @@ public class Product {
         this.description = description;
     }
 
+    public Product(int imageResource, String title, String description, String s, double v) {
+    }
+
     public int getImageResource() {
         return imageResource;
     }

@@ -6,12 +6,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.boulang.bean.ProduitBean;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewProducts;
     private ProductAdapter productAdapter;
+    private ProductApi productApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,15 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
 
-
         // Initialisez la liste des produits
-        List<Product> productList = new ArrayList<>();
-        productList.add(new Product(R.drawable.paindecampagne, "Pain de campagne", "2euros"));
-        productList.add(new Product(R.drawable.bread, "Bread", "1euros"));
-        productList.add(new Product(R.drawable.bag, "Baguette", "0euros90"));
-        productList.add(new Product(R.drawable.painnoix, "Pain noix", "2euros20"));
-        productList.add(new Product(R.drawable.raison, "Pain Raison", "2euros90"));
-        // Ajoutez d'autres produits à la liste si nécessaire
+        List<ProduitBean> productList = new ArrayList<>();
+
+
 
         // Initialisez l'adaptateur avec la liste des produits
         productAdapter = new ProductAdapter(productList);
@@ -36,7 +46,112 @@ public class MainActivity extends AppCompatActivity {
         // Configurez le RecyclerView avec un gestionnaire de disposition (LayoutManager) et l'adaptateur ProductAdapter
         recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewProducts.setAdapter(productAdapter);
+
+        // Initialisez Retrofit et l'API
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://90.55.230.244:8080/GetProduits/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        productApi = retrofit.create(ProductApi.class);
     }
 
+    public void addProduct() {
+        Product product = new Product(1, "Product 1", "photo1.jpg", "Description of product 1", 10.0);
+        Call<Product> call = productApi.addProduct(product);
 
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (response.isSuccessful()) {
+                    // Handle successful response
+                } else {
+                    // Handle error response
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                // Handle failure
+            }
+        });
+    }
+
+    public void deleteProduct() {
+        Call<Void> call = productApi.deleteProduct(1);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Handle successful response
+                } else {
+                    // Handle error response
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Handle failure
+            }
+        });
+    }
+
+    public void updateProduct() {
+        Product updatedProduct = new Product(1, "Updated Product 1", "photo1_updated.jpg", "Updated description of product 1", 15.0);
+        Call<Product> call = productApi.updateProduct(1, updatedProduct);
+
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (response.isSuccessful()) {
+                    // Handle successful response
+                } else {
+                    // Handle error response
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                // Handle failure
+            }
+        });
+    }
+
+    public List<ProduitBean> getProduits() {
+        Call<ProduitBean> call = productApi.getProduct(1);
+
+       /*call.enqueue(new Callback<ProduitBean>() {
+            @Override
+            public void onResponse(Call<ProduitBean> call, Response<ProduitBean> response) {
+                if (response.isSuccessful()) {
+                    ProduitBean product = response.body();
+                    // Handle successful response
+                } else {
+                    // Handle error response
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProduitBean> call, Throwable t) {
+                // Handle failure
+            }*/
+                return Call;
+       // });
+    }
+
+    public interface ProductApi {
+        @POST("products")
+        Call<Product> addProduct(@Body Product product);
+
+        @DELETE("products/{id}")
+        Call<Void> deleteProduct(@Path("id") int id);
+
+        @PUT("products/{id}")
+        Call<Product> updateProduct(@Path("id") int id, @Body Product product);
+
+        @GET("products/{id}")
+        Call<Product> getProduct(@Path("id") int id);
+    }
 }
+

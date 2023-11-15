@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
 
         // Initialisez la liste des produits
-        ProduitListBean productList = new ProduitListBean;
+        ProduitListBean productList;
         try {
             productList = RequestUtils.getProduits();
         } catch (Exception e) {

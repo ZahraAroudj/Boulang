@@ -13,14 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.boulang.Product;
 import com.example.boulang.R;
 import com.example.boulang.bean.ProduitBean;
+import com.example.boulang.bean.ProduitListBean;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private List<ProduitBean> productList;
+    private ProduitListBean productList;
 
-    public ProductAdapter(List<ProduitBean> productList) {
+    public ProductAdapter(ProduitListBean productList) {
         this.productList = productList;
     }
 
@@ -52,7 +53,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        ProduitBean product = productList.get(position);
+        ProduitBean product = productList.getListeProduits().get(position);
        // holder.imageViewProduct.setImageResource(product.getProduit_photo().toString();
         holder.textViewTitle.setText(product.getProduit_nom());
         holder.textViewDescription.setText(product.getProduit_description());

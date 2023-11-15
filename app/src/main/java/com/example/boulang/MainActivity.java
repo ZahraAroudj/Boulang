@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.example.boulang.bean.ProduitBean;
+import com.example.boulang.bean.ProduitListBean;
+import com.example.boulang.bean.RequestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
 
         // Initialisez la liste des produits
-        List<ProduitBean> productList = new ArrayList<>();
-
+        ProduitListBean productList = new ProduitListBean;
+        try {
+            productList = RequestUtils.getProduits();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
 
         // Initialisez l'adaptateur avec la liste des produits
@@ -57,69 +63,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addProduct() {
-        Product product = new Product(1, "Product 1", "photo1.jpg", "Description of product 1", 10.0);
-        Call<Product> call = productApi.addProduct(product);
-
-        call.enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                if (response.isSuccessful()) {
-                    // Handle successful response
-                } else {
-                    // Handle error response
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-                // Handle failure
-            }
-        });
+//        Product product = new Product(1, "Product 1", "photo1.jpg", "Description of product 1", 10.0);
+//        Call<Product> call = productApi.addProduct(product);
+//
+//        call.enqueue(new Callback<Product>() {
+//            @Override
+//            public void onResponse(Call<Product> call, Response<Product> response) {
+//                if (response.isSuccessful()) {
+//                    // Handle successful response
+//                } else {
+//                    // Handle error response
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Product> call, Throwable t) {
+//                // Handle failure
+//            }
+//        });
     }
 
     public void deleteProduct() {
-        Call<Void> call = productApi.deleteProduct(1);
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    // Handle successful response
-                } else {
-                    // Handle error response
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                // Handle failure
-            }
-        });
+//        Call<Void> call = productApi.deleteProduct(1);
+//
+//        call.enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if (response.isSuccessful()) {
+//                    // Handle successful response
+//                } else {
+//                    // Handle error response
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                // Handle failure
+//            }
+//        });
     }
 
     public void updateProduct() {
-        Product updatedProduct = new Product(1, "Updated Product 1", "photo1_updated.jpg", "Updated description of product 1", 15.0);
-        Call<Product> call = productApi.updateProduct(1, updatedProduct);
-
-        call.enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                if (response.isSuccessful()) {
-                    // Handle successful response
-                } else {
-                    // Handle error response
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-                // Handle failure
-            }
-        });
+//        Product updatedProduct = new Product(1, "Updated Product 1", "photo1_updated.jpg", "Updated description of product 1", 15.0);
+//        Call<Product> call = productApi.updateProduct(1, updatedProduct);
+//
+//        call.enqueue(new Callback<Product>() {
+//            @Override
+//            public void onResponse(Call<Product> call, Response<Product> response) {
+//                if (response.isSuccessful()) {
+//                    // Handle successful response
+//                } else {
+//                    // Handle error response
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Product> call, Throwable t) {
+//                // Handle failure
+//            }
+//        });
     }
 
-    public List<ProduitBean> getProduits() {
-        Call<ProduitBean> call = productApi.getProduct(1);
+    //public List<ProduitBean> getProduits() {
+   //    List<ProduitBean> call = productApi.getProduct();
 
        /*call.enqueue(new Callback<ProduitBean>() {
             @Override
@@ -136,22 +142,25 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<ProduitBean> call, Throwable t) {
                 // Handle failure
             }*/
-                return Call;
+//                return call;
        // });
-    }
+    //}
 
     public interface ProductApi {
         @POST("products")
-        Call<Product> addProduct(@Body Product product);
+        Call<ProduitBean> addProduct(@Body ProduitBean product);
 
         @DELETE("products/{id}")
         Call<Void> deleteProduct(@Path("id") int id);
 
         @PUT("products/{id}")
-        Call<Product> updateProduct(@Path("id") int id, @Body Product product);
+        Call<ProduitBean> updateProduct(@Path("id") int id, @Body ProduitBean product);
 
         @GET("products/{id}")
-        Call<Product> getProduct(@Path("id") int id);
+        Call<ProduitBean> getProduct(@Path("id") int id);
+
+        @GET("produits/")
+        Call<List<ProduitBean>> getProduct();
     }
 }
 

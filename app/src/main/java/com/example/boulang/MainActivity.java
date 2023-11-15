@@ -36,18 +36,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
-
+        new Thread(() -> {
+            ProduitListBean productList;
+            try {
+                productList = RequestUtils.getProduits();
+                // Initialisez l'adaptateur avec la liste des produits
+                productAdapter = new ProductAdapter(productList);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         // Initialisez la liste des produits
-        ProduitListBean productList;
-        try {
-            productList = RequestUtils.getProduits();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
 
-        // Initialisez l'adaptateur avec la liste des produits
-        productAdapter = new ProductAdapter(productList);
+
+
 
         // Configurez le RecyclerView avec un gestionnaire de disposition (LayoutManager) et l'adaptateur ProductAdapter
         recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));

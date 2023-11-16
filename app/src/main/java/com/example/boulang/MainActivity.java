@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         binding = binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         recyclerViewProducts = binding.recyclerViewProducts;
-        recyclerViewProducts.setLayoutManager(new GridLayoutManager(this,1));
+//        recyclerViewProducts.setLayoutManager(new GridLayoutManager(this,1));
         refreshList();
 
 
@@ -61,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("refreshlist thread lancé");
             try {
                 System.out.println("Le thread lance RequestUtils.getProduits");
-                myList = RequestUtils.getProduits().getListe();
-                System.out.println(myList.toString());
+                myList = RequestUtils.getProduits();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            //RecyclerView
+            productAdapter.submitList(new ArrayList<>(myList));
         }).start();
 
-        //RecyclerView
-//        productAdapter.submitList(new ArrayList<>(myList));
+
 
     }
 

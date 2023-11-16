@@ -3,6 +3,7 @@ package com.example.boulang;
 import android.view.LayoutInflater;
 
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 
 import androidx.annotation.NonNull;

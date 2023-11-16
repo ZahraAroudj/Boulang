@@ -1,6 +1,7 @@
 package com.example.boulang.bean;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,8 +35,6 @@ public class RequestUtils {
                     throw new IOException("Error code : " + errorMessage.getCod()+ " => " + errorMessage.getMessage());
                 }
             }
-            System.out.println("sendGet response " + response.body().string());
-
             return response.body().string();
         }
     }
@@ -64,14 +63,18 @@ public class RequestUtils {
         }
     }
 
-    public static ListeProduitsBean getProduits() throws Exception {
+    public static ArrayList<ProduitBean> getProduits() throws Exception {
 
         System.out.println("GetProduits se lance et lance sendget");
         String json = sendGet("http://90.55.230.244:8080/getProduits");
-        System.out.println("ici rien ne se passe");
 
-        ListeProduitsBean liste = new Gson().fromJson(json, ListeProduitsBean.class);
+        System.out.println("Le Json est récupéré dans GetProduits");
+        System.out.println(json);
+        Gson gson = new Gson();
+        ArrayList<ProduitBean> liste = gson.fromJson(json, new TypeToken<List<ProduitBean>>(){}.getType());
+        System.out.println(liste);
 
         return liste;
+
     }
 }

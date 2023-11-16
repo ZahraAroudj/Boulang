@@ -48,11 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        productAdapter = new ProductAdapter();
         recyclerViewProducts = binding.recyclerViewProducts;
+        recyclerViewProducts.setAdapter(productAdapter);
 //        recyclerViewProducts.setLayoutManager(new GridLayoutManager(this,1));
         refreshList();
-
-
 
     }
 
@@ -62,11 +63,15 @@ public class MainActivity extends AppCompatActivity {
             try {
                 System.out.println("Le thread lance RequestUtils.getProduits");
                 myList = RequestUtils.getProduits();
+                //RecyclerView
+                runOnUiThread(() -> {
+                    productAdapter.submitList(new ArrayList<>(myList));
+
+                });
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            //RecyclerView
-            productAdapter.submitList(new ArrayList<>(myList));
+
         }).start();
 
 

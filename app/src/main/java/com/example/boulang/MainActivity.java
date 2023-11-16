@@ -36,38 +36,39 @@ import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewProducts;
-//    private ProductApi productApi;
     private ActivityMainBinding binding = null;
 
     private List<ProduitBean> myList;
-    private ListeProduitsBean listeProduitsBean;
+    ArrayList<ProduitBean> fakeList = new ArrayList<ProduitBean>();
+
     private ProductAdapter productAdapter = new ProductAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         productAdapter = new ProductAdapter();
-        recyclerViewProducts = binding.recyclerViewProducts;
-        recyclerViewProducts.setAdapter(productAdapter);
-//        recyclerViewProducts.setLayoutManager(new GridLayoutManager(this,1));
-        refreshList();
+        binding.recyclerViewProducts.setAdapter(productAdapter);
 
-    }
-
-    public void refreshList() {
         new Thread(() -> {
             System.out.println("refreshlist thread lancé");
             try {
-                System.out.println("Le thread lance RequestUtils.getProduits");
-                myList = RequestUtils.getProduits();
-                //RecyclerView
-                runOnUiThread(() -> {
-                    productAdapter.submitList(new ArrayList<>(myList));
+//                System.out.println("Le thread lance RequestUtils.getProduits");
+                ArrayList<ProduitBean> myList = RequestUtils.getProduits();
 
-                });
+                //RecyclerView
+                if (myList != null) {
+                    runOnUiThread(() -> {
+                        binding.recyclerViewProducts.setAdapter(productAdapter);
+                        binding.recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));
+                        productAdapter.submitList(myList);
+                    });
+                }
+
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -75,8 +76,40 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
 
+//        refreshList();
+
+//        ProduitBean p1 = new ProduitBean(1, "pain1", "urlbidon", "description1", 1.50 );
+//        ProduitBean p2 = new ProduitBean(2, "pain2", "urlbidon", "description2", 1.60 );
+//        ProduitBean p3 = new ProduitBean(3, "pain3", "urlbidon", "description3", 1.70 );
+//        fakeList.add(p1);
+//        fakeList.add(p2);
+//        fakeList.add(p3);
+//        System.out.println("fakelist" + fakeList);
+//        productAdapter.submitList(fakeList);
 
     }
+
+//    public void refreshList() {
+//        new Thread(() -> {
+//            System.out.println("refreshlist thread lancé");
+//            try {
+//                System.out.println("Le thread lance RequestUtils.getProduits");
+//                ArrayList<ProduitBean> myList = RequestUtils.getProduits();
+//                //RecyclerView
+//                runOnUiThread(() -> {
+//                    productAdapter.submitList(myList);
+////                    productAdapter.submitList(fakeList);
+//
+//                });
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        }).start();
+//
+//
+//
+//    }
 
 
 

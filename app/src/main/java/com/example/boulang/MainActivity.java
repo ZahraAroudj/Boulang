@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.boulang.bean.ListeProduitsBean;
 import com.example.boulang.bean.ProduitBean;
 import com.example.boulang.bean.ProduitListBean;
 import com.example.boulang.bean.RequestUtils;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
         new Thread(() -> {
-            ProduitListBean productList;
+            ListeProduitsBean productList;
             try {
                 productList = RequestUtils.getProduits();
                 // Initialisez l'adaptateur avec la liste des produits

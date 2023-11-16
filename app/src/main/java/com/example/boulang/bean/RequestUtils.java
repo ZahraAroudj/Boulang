@@ -61,13 +61,13 @@ public class RequestUtils {
         }
     }
 
-    public static ProduitListBean getProduits() throws Exception {
+    public static ListeProduitsBean getProduits() throws Exception {
         //Eventuel contrôle
         //Réaliser la requête.
         String json = sendGet("http://90.55.230.244:8080/getProduits");
 
         //Parser le JSON avec le bon bean et GSON
-        ProduitListBean liste = new Gson().fromJson(json, ProduitListBean.class);
+        ListeProduitsBean liste = new Gson().fromJson(json, ListeProduitsBean.class);
 
 
         //Eventuel contrôle ou extraction de données

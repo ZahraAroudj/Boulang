@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.boulang.Product;
 import com.example.boulang.R;
+import com.example.boulang.bean.ListeProduitsBean;
 import com.example.boulang.bean.ProduitBean;
 import com.example.boulang.bean.ProduitListBean;
 
@@ -19,9 +20,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private ProduitListBean productList;
+    private ListeProduitsBean productList;
 
-    public ProductAdapter(ProduitListBean productList) {
+    public ProductAdapter(ListeProduitsBean productList) {
         this.productList = productList;
     }
 
@@ -53,7 +54,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        ProduitBean product = productList.getListeProduits().get(position);
+        ProduitBean product = productList.getListe().get(position);
        // holder.imageViewProduct.setImageResource(product.getProduit_photo().toString();
         holder.textViewTitle.setText(product.getProduit_nom());
         holder.textViewDescription.setText(product.getProduit_description());
@@ -81,6 +82,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public int getItemCount() {
-        return productList.getListeProduits().size();
+        return productList.getListe().size();
     }
 }

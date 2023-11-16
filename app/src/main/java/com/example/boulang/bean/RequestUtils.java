@@ -18,7 +18,7 @@ public class RequestUtils {
     // sendGet
     /* -------------------------------------- */
     public static String sendGet(String url) throws Exception {
-        System.out.println("url : " + url);
+        System.out.println("senGet se lance avec GET url : " + url);
         OkHttpClient client = new OkHttpClient();
 
         //Création de la requête
@@ -27,12 +27,15 @@ public class RequestUtils {
         //Le try-with ressource doc ici
         //Nous permet de fermer la réponse en cas de succès ou d'échec (dans le finally)
         try (Response response = client.newCall(request).execute()) {
+
             if (!response.isSuccessful()) {
                 if(!response.body().toString().isEmpty()){
                     ErrorMessageBean errorMessage = new Gson().fromJson(response.body().string(), ErrorMessageBean.class);
                     throw new IOException("Error code : " + errorMessage.getCod()+ " => " + errorMessage.getMessage());
                 }
             }
+            System.out.println("sendGet response " + response.body().string());
+
             return response.body().string();
         }
     }
@@ -41,7 +44,7 @@ public class RequestUtils {
     // sendPost
     /* -------------------------------------- */
     public static String sendPost(String url, String jsonAEnvoyer ) throws Exception {
-        System.out.println("url : " + url);
+        System.out.println("RequestUtils POST url : " + url);
         OkHttpClient client = new OkHttpClient();
 
         //Corps de la requête
@@ -62,17 +65,13 @@ public class RequestUtils {
     }
 
     public static ListeProduitsBean getProduits() throws Exception {
-        //Eventuel contrôle
-        //Réaliser la requête.
-        String json = sendGet("http://90.55.230.244:8080/getProduits");
 
-        //Parser le JSON avec le bon bean et GSON
+        System.out.println("GetProduits se lance et lance sendget");
+        String json = sendGet("http://90.55.230.244:8080/getProduits");
+        System.out.println("ici rien ne se passe");
+
         ListeProduitsBean liste = new Gson().fromJson(json, ListeProduitsBean.class);
 
-
-        //Eventuel contrôle ou extraction de données
-
-        //Retourner la donnée
         return liste;
     }
 }

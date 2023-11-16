@@ -1,15 +1,23 @@
 package com.example.boulang;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 
 import com.example.boulang.bean.ListeProduitsBean;
 import com.example.boulang.bean.ProduitBean;
 import com.example.boulang.bean.ProduitListBean;
 import com.example.boulang.bean.RequestUtils;
+import com.example.boulang.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,143 +36,46 @@ import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewProducts;
-    private ProductAdapter productAdapter;
-    private ProductApi productApi;
+//    private ProductApi productApi;
+    private ActivityMainBinding binding = null;
+
+    private List<ProduitBean> myList;
+    private ListeProduitsBean listeProduitsBean;
+    private ProductAdapter productAdapter = new ProductAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = binding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        recyclerViewProducts = binding.recyclerViewProducts;
+        recyclerViewProducts.setLayoutManager(new GridLayoutManager(this,1));
+        refreshList();
 
-        recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
+
+
+    }
+
+    public void refreshList() {
         new Thread(() -> {
-            ListeProduitsBean productList;
+            System.out.println("refreshlist thread lancé");
             try {
-                productList = RequestUtils.getProduits();
-                // Initialisez l'adaptateur avec la liste des produits
-                productAdapter = new ProductAdapter(productList);
+                System.out.println("Le thread lance RequestUtils.getProduits");
+                myList = RequestUtils.getProduits().getListe();
+                System.out.println(myList.toString());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        });
-        // Initialisez la liste des produits
+        }).start();
 
+        //RecyclerView
+//        productAdapter.submitList(new ArrayList<>(myList));
 
-
-
-
-        // Configurez le RecyclerView avec un gestionnaire de disposition (LayoutManager) et l'adaptateur ProductAdapter
-        recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewProducts.setAdapter(productAdapter);
-
-        // Initialisez Retrofit et l'API
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://90.55.230.244:8080/GetProduits/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        productApi = retrofit.create(ProductApi.class);
     }
 
-    public void addProduct() {
-//        Product product = new Product(1, "Product 1", "photo1.jpg", "Description of product 1", 10.0);
-//        Call<Product> call = productApi.addProduct(product);
-//
-//        call.enqueue(new Callback<Product>() {
-//            @Override
-//            public void onResponse(Call<Product> call, Response<Product> response) {
-//                if (response.isSuccessful()) {
-//                    // Handle successful response
-//                } else {
-//                    // Handle error response
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Product> call, Throwable t) {
-//                // Handle failure
-//            }
-//        });
-    }
 
-    public void deleteProduct() {
-//        Call<Void> call = productApi.deleteProduct(1);
-//
-//        call.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    // Handle successful response
-//                } else {
-//                    // Handle error response
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                // Handle failure
-//            }
-//        });
-    }
 
-    public void updateProduct() {
-//        Product updatedProduct = new Product(1, "Updated Product 1", "photo1_updated.jpg", "Updated description of product 1", 15.0);
-//        Call<Product> call = productApi.updateProduct(1, updatedProduct);
-//
-//        call.enqueue(new Callback<Product>() {
-//            @Override
-//            public void onResponse(Call<Product> call, Response<Product> response) {
-//                if (response.isSuccessful()) {
-//                    // Handle successful response
-//                } else {
-//                    // Handle error response
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Product> call, Throwable t) {
-//                // Handle failure
-//            }
-//        });
-    }
 
-    //public List<ProduitBean> getProduits() {
-   //    List<ProduitBean> call = productApi.getProduct();
 
-       /*call.enqueue(new Callback<ProduitBean>() {
-            @Override
-            public void onResponse(Call<ProduitBean> call, Response<ProduitBean> response) {
-                if (response.isSuccessful()) {
-                    ProduitBean product = response.body();
-                    // Handle successful response
-                } else {
-                    // Handle error response
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProduitBean> call, Throwable t) {
-                // Handle failure
-            }*/
-//                return call;
-       // });
-    //}
-
-    public interface ProductApi {
-        @POST("products")
-        Call<ProduitBean> addProduct(@Body ProduitBean product);
-
-        @DELETE("products/{id}")
-        Call<Void> deleteProduct(@Path("id") int id);
-
-        @PUT("products/{id}")
-        Call<ProduitBean> updateProduct(@Path("id") int id, @Body ProduitBean product);
-
-        @GET("products/{id}")
-        Call<ProduitBean> getProduct(@Path("id") int id);
-
-        @GET("produits/")
-        Call<List<ProduitBean>> getProduct();
-    }
 }
 

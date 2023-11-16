@@ -17,7 +17,7 @@ public class ListeProduitsBean {
         return liste;
     }
 
-    public void setListe(ArrayList<ProduitBean> liste) {
+    public void setListe(List<ProduitBean> liste) {
         this.liste = liste;
     }
 

@@ -1,7 +1,12 @@
 package com.example.boulang.bean;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,5 +81,13 @@ public class RequestUtils {
 
         return liste;
 
+    }
+
+    public static void sendCommande(CommandeBean commande, ArrayList<ContenirBean> contenuCommande) throws Exception {
+        ContenuCommandeBean contenuCommandeBean = new ContenuCommandeBean(commande, contenuCommande);
+        String json = new Gson().toJson(contenuCommandeBean);
+        System.out.println("json envoye " + json); //ok
+
+        sendPost("http://90.55.230.244:8080/sendCommande", json);
     }
 }

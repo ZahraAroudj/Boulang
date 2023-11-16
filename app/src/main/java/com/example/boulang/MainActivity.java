@@ -12,12 +12,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.boulang.bean.CommandeBean;
+import com.example.boulang.bean.ContenirBean;
 import com.example.boulang.bean.ListeProduitsBean;
 import com.example.boulang.bean.ProduitBean;
 import com.example.boulang.bean.ProduitListBean;
 import com.example.boulang.bean.RequestUtils;
 import com.example.boulang.databinding.ActivityMainBinding;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,45 +79,37 @@ public class MainActivity extends AppCompatActivity {
 
         }).start();
 
+        binding.buttonValidate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.editTextName.getText().toString().isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Nom absent", Toast.LENGTH_SHORT).show();
+                } else if (binding.editTextPhone.getText().toString().isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Téléphone absent", Toast.LENGTH_SHORT).show();
+                } else if (productAdapter.contenuCommande.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Aucun produit ajouté", Toast.LENGTH_SHORT).show();
+                }  else {
+                    //tout test ok on enregistre
+                    CommandeBean commandeBean = new CommandeBean(-1, binding.editTextName.getText().toString(), Integer.parseInt(binding.editTextPhone.getText().toString()), 01012001);
+                    System.out.println(commandeBean); //ok
+                    System.out.println(productAdapter.contenuCommande); //ok
+                    new Thread(() -> {
+                        try {
+                            RequestUtils.sendCommande(commandeBean, productAdapter.contenuCommande);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }).start();
 
-//        refreshList();
+                }
 
-//        ProduitBean p1 = new ProduitBean(1, "pain1", "urlbidon", "description1", 1.50 );
-//        ProduitBean p2 = new ProduitBean(2, "pain2", "urlbidon", "description2", 1.60 );
-//        ProduitBean p3 = new ProduitBean(3, "pain3", "urlbidon", "description3", 1.70 );
-//        fakeList.add(p1);
-//        fakeList.add(p2);
-//        fakeList.add(p3);
-//        System.out.println("fakelist" + fakeList);
-//        productAdapter.submitList(fakeList);
+
+            }
+        });
+
+
 
     }
-
-//    public void refreshList() {
-//        new Thread(() -> {
-//            System.out.println("refreshlist thread lancé");
-//            try {
-//                System.out.println("Le thread lance RequestUtils.getProduits");
-//                ArrayList<ProduitBean> myList = RequestUtils.getProduits();
-//                //RecyclerView
-//                runOnUiThread(() -> {
-//                    productAdapter.submitList(myList);
-////                    productAdapter.submitList(fakeList);
-//
-//                });
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        }).start();
-//
-//
-//
-//    }
-
-
-
-
 
 }
 

@@ -30,7 +30,6 @@
         android:hint="Téléphone"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:typeface="sans"
         android:background="@drawable/edittext_border"/>

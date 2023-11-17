@@ -1,5 +1,10 @@
-package com.example.boulang.bean;
+package com.example.boulang;
 
+import com.example.boulang.bean.CommandeBean;
+import com.example.boulang.bean.ContenirBean;
+import com.example.boulang.bean.ContenuCommandeBean;
+import com.example.boulang.bean.ErrorMessageBean;
+import com.example.boulang.bean.ProduitBean;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
